@@ -42,4 +42,4 @@ models:
     marts:
       +materialized: table
     staing:
-      materialized: view
+      +materialized: view
