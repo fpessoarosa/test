@@ -1,4 +1,19 @@
-{% set payments = ['bank_transfer', 'credit_card', 'coupon', 'gift_card'] -%}
+{% set payment_methods_query %}
+select distinct payment_method from {{ ref("stg_stripe__payments")}}
+order by 1
+{% endset %}
+
+{% set results = run_query(payment_methods_query) %}
+
+{% if execute %}
+{# Return the first column #}
+{% set payments = results.columns[0].values() %}
+{% else %}
+{% set payments = [] %}
+{% endif %}
+
+{{log('Check all payment_method : '  ~ payments, info=True )}}
+
 with payment_tmp as (
     select * from {{ ref("stg_stripe__payments")}}
 ),

@@ -1,0 +1,8 @@
+{{ union_tables_by_prefix(
+
+      database='raw',
+      schema='stripe', 
+      prefix='orders__'        
+      )
+      
+  }}
