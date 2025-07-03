@@ -43,3 +43,41 @@ sources:
         # freshness:
         #   warn_after: {count: 12, period: hour}
         #   error_after: {count: 24, period: hour}      
+  - name: jaffle_shop_ref
+    database: raw
+    schema: jaffle_shop
+    # usar freshness for all table
+    # loaded_at_field: _etl_loaded_at
+    # freshness:
+    #   warn_after: {count: 12, period: hour}
+    #   error_after: {count: 24, period: hour}          
+    tables:
+      - name: customers
+        # ignore freshness for specific table
+        freshness: null
+        description: "customer data from raw source"
+        columns:
+          - name: id
+            description: "Primary key for customers"
+            tests:
+              - not_null
+              - unique
+
+      - name: orders
+        description: "orders data from raw source"
+        columns:
+          - name: id
+            description: "Primary key for orders"
+            tests:
+              - unique
+          - name: status
+            description: '{{ doc("status_code") }}'
+            tests:
+              - accepted_values:
+                  values: ['returned', 'completed', 'shipped', 'return_pending', 'placed']
+
+        # use freshness for specific table
+        # loaded_at_field: _etl_loaded_at
+        # freshness:
+        #   warn_after: {count: 12, period: hour}
+        #   error_after: {count: 24, period: hour}                  
